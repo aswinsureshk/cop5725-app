@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>DangerScreen Page</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+</head>
+<body>
+	<div class="se-pre-con"></div>
+	<div id="region_radio_button" class="regionradio">
+		<script src="js/main.js"></script>
+		<form id="o" method="post" action="#" onsubmit="return validateForm();">
+			<fieldset id="rb">
+				<legend>Select Region</legend>
+			</fieldset>
+		</form>
+		<script src="js/main.js"></script>
+		<script type="text/javascript">
+			function resetCanvas(){
+				if (chart!=undefined)
+					chart.destroy();
+			};
+			function filterRegions(region){
+				resetCanvas();
+				var region = document.querySelector('input[name = "radio"]:checked').value;
+				var filtered_la = [], filtered_df = [];
+				if(reg_map.has(region)){
+					las = reg_map.get(region);
+					console.log(las)
+					for (var i in las){
+						la = las[i];
+						filtered_la.push(la);
+						filtered_df.push(la_map.get(la));
+					}
+				}
+				drawDoughnutChart(filtered_la, filtered_df);
+			}
+			function displayRegionCheckBox() {
+					var rb = document.getElementById("rb");
+					var i=1;
+					var container = document.createElement("div");
+					container.className="container";
+					for (var [key, value] of reg_map) {
+							var div = document.createElement("div");
+							div.className="radio radio-info";
+							var radiobutton = document.createElement("input");
+							radiobutton.type='radio';
+							radiobutton.name='radio';
+							radiobutton.id="id";
+							radiobutton.onclick=function() {filterRegions()};
+							radiobutton.value=key;
+							if(i==1)radiobutton.checked=true;
+							var label = document.createElement('label')
+							label.htmlFor = 'id';
+							label.appendChild(document.createTextNode(key));
+							div.appendChild(radiobutton);
+							div.appendChild(label);
+							container.appendChild(div);
+							i++;
+					}
+					rb.append(container);
+					// console.log(rb.innerHTML);
+					// new_la_names = filterRegions(region);
+			}
+		</script>
+	</div>
+	<div id="donughtchart" class="doughnutchart">
+		<canvas id="doughnut-chart"></canvas>
+		<script src="js/main.js"></script>
+		<script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+		<script>
+				//When the page has loaded.
+				$( document ).ready(function(){
+					//Perform Ajax request.
+					$.ajax({
+						url: '/getDangerFactor',
+						type: 'get',
+						success: function(data){
+							$(".se-pre-con").fadeOut('slow');
+							storeData(data.rows);
+							displayRegionCheckBox();
+							filterRegions(data.rows[0].REGION_NAME[0]);
+						},
+						error: function (xhr, ajaxOptions, thrownError) {
+							var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+						}
+					});
+				});
+				$( document).ready(function(){
+					// Animate loader off screen
+					$(".se-pre-con");
+				});
+		</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Trends Page</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+	<div class="barchartgrouped">
+		
+	<canvas id="bar-chart-grouped"></canvas>
+	</div>
+	<div class="piechart">
+	<canvas id="pie-chart"></canvas>
+	</div>
+
+	<div class="linechart">
+	<canvas id="line-chart"></canvas>
+	</div>
+
+	<div class="bubblechart">
+	<canvas id="bubble-chart"></canvas>
+	</div>
+
+	<div class="linechart2">
+	<canvas id="line-chart-2"></canvas>
+	</div>
+	<!-- <canvas id="line-chart" width="800" height="450"></canvas>
+	<canvas id="pie-chart" width="800" height="450"></canvas>
+	<canvas id="radar-chart" width="800" height="600"></canvas>
+	<canvas id="polar-chart" width="800" height="450"></canvas>
+	<canvas id="doughnut-chart" width="800" height="450"></canvas>
+	<canvas id="bar-chart-horizontal" width="800" height="450"></canvas>
+	<canvas id="bar-chart-grouped" width="800" height="450"></canvas>
+	<canvas id="mixed-chart" width="800" height="450"></canvas>
+	<canvas id="bubble-chart" width="800" height="800"></canvas> -->
+	<script src="js/main.js"></script>
+	<script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>
+	<script>
+			//When the page has loaded.
+			$( document ).ready(function(){
+				//Perform Ajax request.
+				$.ajax({
+					url: '/getWeeklyAccidentStatistics',
+					type: 'get',
+					success: function(data){
+						drawBarChartGrouped(data.rows)
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+					  }
+				});
+				$.ajax({
+					url: '/getAccidentsPerRegion',
+					type: 'get',
+					success: function(data){
+						drawPieChart(data.rows)
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+					  }
+				});
+				$.ajax({
+					url: '/getVehicleAccident',
+					type: 'get',
+					success: function(data){
+						drawLineChartForVehicleAccident(data.rows)
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+					  }
+				});
+				$.ajax({
+					url: '/getAADT',
+					type: 'get',
+					success: function(data){
+						console.log(data.rows)
+						drawBubbleChart(data.rows)
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+					  }
+				});
+				$.ajax({
+					url: '/getHourlyAccidents',
+					type: 'get',
+					success: function(data){
+						console.log(data.rows)
+						drawLineChartForHourlyAccidents(data.rows)
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+					  }
+				});
+			});
+	</script>
+</body>
+</html>

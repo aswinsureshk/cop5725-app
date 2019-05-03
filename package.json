@@ -1,0 +1,24 @@
+{
+  "name": "nodejsapp",
+  "version": "0.0.1",
+  "description": "This is an app that we'll create showing off the basics of node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "author": "aswin",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.2",
+    "body-parser": "^1.19.0",
+    "connect": "^3.6.6",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "oracledb": "^3.1.2",
+    "path": "^0.12.7",
+    "require": "^2.4.20",
+    "requirejs": "^2.3.6",
+    "socketio": "^1.0.0"
+  }
+}
